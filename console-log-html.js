@@ -38,7 +38,7 @@ var ConsoleLogHTML = (function(
       partEls.push(`<log-part style="${style}">${part}</log-part>`);
       styleIterator++;
     });
-    return partEls;
+    return partEls.concat([].slice.call(arguments, parts.length));
   }
   var targets = [];
   var originalSkipHtml = console.skipHtml,
