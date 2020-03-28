@@ -19,6 +19,9 @@ var ConsoleLogHTML = (function(
   }
 
   function handleStyling(msg1) {
+    if (!msg1) {
+      return msg1;
+    }
     var style = "";
     if (!msg1.includes("%c")) {
       return [].slice.call(arguments);
