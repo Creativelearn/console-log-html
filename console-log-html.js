@@ -78,7 +78,7 @@ var ConsoleLogHTML = (function(
         let args = handleStyling.apply(null, [].slice.call(arguments));
         let _includeTimestamp = includeTimestamp;
         target = targets[targets.length - 1];
-        if (method == "group") {
+        if (method == "group" || method == "groupCollapsed") {
           _includeTimestamp = false;
           var heading = document.createElement("li");
           heading.innerHTML = arguments[0];
@@ -217,7 +217,16 @@ var ConsoleLogHTML = (function(
   };
 })(
   {},
-  ["log", "debug", "info", "warn", "error", "group", "groupEnd"],
+  [
+    "log",
+    "debug",
+    "info",
+    "warn",
+    "error",
+    "group",
+    "groupEnd",
+    "groupCollapsed"
+  ],
   console,
   Object,
   "undefined",
