@@ -168,27 +168,3 @@ var ConsoleLogHTML = (function (original, methods, console, Object, TYPE_UNDEFIN
 if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
     module.exports = ConsoleLogHTML;
 }
-
-// Usage
-const ul = document.createElement('ul');
-        ul.id = 'vwo-troubleshooter-logs';
-        //@ts-ignore
-        ul.style = `
-            height: 500px !important;
-            overflow: scroll !important;
-            position: fixed !important;
-            right: 0 !important;
-            background: azure !important;
-            width: 500px;
-            z-index: 100000000;
-            list-style: none;
-            padding: 20px;
-        `;
-        document.body.prepend(ul);
-            window.ConsoleLogHTML.connect(
-                document.getElementById('vwo-troubleshooter-logs'),
-                {},
-                true,
-                false,
-                true
-            );
