@@ -81,10 +81,11 @@ var ConsoleLogHTML = (function(
         if (method == "group" || method == "groupCollapsed") {
           _includeTimestamp = false;
           var heading = document.createElement("li");
+          heading.classList.push("console-log-html-group-name");
           heading.innerHTML = arguments[0];
           target.appendChild(heading);
           let ul = document.createElement("ul");
-          ul.id = "vwo-troubleshooter-logs-" + arguments[0];
+          ul.id = "console-log-html-logs-" + arguments[0];
           target.appendChild(ul);
           targets.push(ul);
           return;
