@@ -9,7 +9,26 @@ var ConsoleLogHTML = (function (original, methods, console, Object, TYPE_UNDEFIN
             original[methods[i]] = console[methods[i]];
         }
     }
-
+    
+    function handleStyling(msg1) {   
+        var style = '';
+        if (!msg1.includes('%c')) {
+           return [].slice.call(arguments);
+        }
+        var parts = msg1.split('%c');
+        var partEls = [];
+        var styles = [].slice.call(arguments,1);
+        var styleIterator = -1;
+        parts.forEach(function (part, i) {
+          let style = '';
+          if (styleIterator>-1) {
+            style = styles[styleIterator]
+          }
+          partEls.push(`<log-part style="${style}">${part}</log-part>`);
+          styleIterator++;
+        });
+        return partEls;
+     }
     var originalSkipHtml = console.skipHtml,
         originalKeys = Object.keys(original),
         originalClear = TYPE_UNDEFINED !== typeof console.clear ? console.clear : false,
@@ -36,14 +55,14 @@ var ConsoleLogHTML = (function (original, methods, console, Object, TYPE_UNDEFIN
 
             console[method] = function () {
                 var finalMsg, msgPart, i, li;
-
+                let args = handleStyling.apply(null, [].slice.call(arguments));
                 finalMsg = "";
-                for (i = 0; i < arguments.length; i++) {
-                    msgPart = arguments[i] + ""; // "safe toString()" (works with null & undefined)
+                for (i = 0; i < args.length; i++) {
+                    msgPart = args[i] + ""; // "safe toString()" (works with null & undefined)
                     if (msgPart === INSTANCE_OBJECT_OBJECT) {
                         try {
                             // Prefix with "Object" like in Firefox-, Chrome-, and node.js-output
-                            msgPart = "Object " + JSON.stringify(arguments[i]);
+                            msgPart = "Object " + JSON.stringify(args[i]);
                         } catch (e) {
 
                         }
@@ -55,7 +74,7 @@ var ConsoleLogHTML = (function (original, methods, console, Object, TYPE_UNDEFIN
                 finalMsg = (includeTimestamp ? "[" + (new Date()).toLocaleTimeString() + "] " : "") + finalMsg;
                 li = document.createElement("li");
                 li.setAttribute("data-level", method);
-                li.innerText = finalMsg;
+                li.innerHTML = finalMsg;
                 if (options[method]) {
                     li.setAttribute("class", options[method]);
                 }
@@ -67,7 +86,7 @@ var ConsoleLogHTML = (function (original, methods, console, Object, TYPE_UNDEFIN
                 }
 
                 if (logToConsole) {
-                    console.skipHtml[method].apply(console, arguments);
+                    console.skipHtml[method].apply(console, args);
                 }
             };
         };
@@ -149,3 +168,27 @@ var ConsoleLogHTML = (function (original, methods, console, Object, TYPE_UNDEFIN
 if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
     module.exports = ConsoleLogHTML;
 }
+
+// Usage
+const ul = document.createElement('ul');
+        ul.id = 'vwo-troubleshooter-logs';
+        //@ts-ignore
+        ul.style = `
+            height: 500px !important;
+            overflow: scroll !important;
+            position: fixed !important;
+            right: 0 !important;
+            background: azure !important;
+            width: 500px;
+            z-index: 100000000;
+            list-style: none;
+            padding: 20px;
+        `;
+        document.body.prepend(ul);
+            window.ConsoleLogHTML.connect(
+                document.getElementById('vwo-troubleshooter-logs'),
+                {},
+                true,
+                false,
+                true
+            );
