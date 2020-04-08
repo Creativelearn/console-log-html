@@ -2,7 +2,7 @@
  * Redirects console output to an &lt;ul&gt; element
  * @namespace
  */
-var ConsoleLogHTML = (function(
+var ConsoleLogHTML = (function (
   original,
   methods,
   console,
@@ -30,7 +30,7 @@ var ConsoleLogHTML = (function(
     var partEls = [];
     var styles = [].slice.call(arguments, 1);
     var styleIterator = -1;
-    parts.forEach(function(part, i) {
+    parts.forEach(function (part, i) {
       let style = "";
       if (styleIterator > -1) {
         style = styles[styleIterator];
@@ -46,7 +46,7 @@ var ConsoleLogHTML = (function(
     originalClear =
       TYPE_UNDEFINED !== typeof console.clear ? console.clear : false,
     jQueryIsUp = typeof jQuery !== TYPE_UNDEFINED ? jQuery : false,
-    extend = function() {
+    extend = function () {
       var out = {},
         i = 0,
         j,
@@ -61,7 +61,7 @@ var ConsoleLogHTML = (function(
 
       return out;
     },
-    register = function(
+    register = function (
       method,
       target,
       options,
@@ -69,11 +69,11 @@ var ConsoleLogHTML = (function(
       logToConsole,
       appendAtBottom
     ) {
-      console.skipHtml[method] = function() {
+      console.skipHtml[method] = function () {
         original[method].apply(console, arguments);
       };
 
-      console[method] = function() {
+      console[method] = function () {
         var finalMsg, msgPart, i, li;
         let args = handleStyling.apply(null, [].slice.call(arguments));
         let _includeTimestamp = includeTimestamp;
@@ -146,13 +146,13 @@ var ConsoleLogHTML = (function(
       warn: "text-warning",
       info: "text-success",
       debug: "text-info",
-      log: ""
+      log: "",
     },
     /**
      * Disconnect our console overrides, reverting to the original state
      * @memberof ConsoleLogHTML
      */
-    disconnect: function() {
+    disconnect: function () {
       console.skipHtml = originalSkipHtml;
       for (var i = 0; i < originalKeys.length; i++) {
         console[originalKeys[i]] = original[originalKeys[i]];
@@ -173,7 +173,7 @@ var ConsoleLogHTML = (function(
      * @param {boolean} [appendAtBottom=false] Whether to append the log messages at the end of the ul-list
      * @throws {Error} If target is not an &lt;ul&gt; element
      */
-    connect: function(
+    connect: function (
       target,
       options,
       includeTimestamp,
@@ -208,13 +208,13 @@ var ConsoleLogHTML = (function(
         targets.push(target);
 
         if (false !== originalClear) {
-          console.clear = function() {
+          console.clear = function () {
             target.innerText = "";
             originalClear.apply(console);
           };
         }
       }
-    }
+    },
   };
 })(
   {},
@@ -226,9 +226,9 @@ var ConsoleLogHTML = (function(
     "error",
     "group",
     "groupEnd",
-    "groupCollapsed"
+    "groupCollapsed",
   ],
-  console,
+  vwoTroubleShooter.console,
   Object,
   "undefined",
   "boolean",
